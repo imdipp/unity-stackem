@@ -28,6 +28,7 @@ public class CubeScript : MonoBehaviour
     public bool moving = true;
     public bool onX;
     const float MARGIN = 0.155f;
+    public Color color;
 
     public bool isSpecial = false;
 
@@ -38,6 +39,7 @@ public class CubeScript : MonoBehaviour
     {
         localScale = transform.localScale;
         position = transform.position;
+        gameObject.GetComponent<Renderer>().material.color = color;
     }
     void OnEnable()
     {
@@ -236,6 +238,7 @@ public class CubeScript : MonoBehaviour
         var extra = GameObject.CreatePrimitive(PrimitiveType.Cube);
         extra.transform.localScale = spawnExcessSize;
         extra.transform.localPosition = spawnExcessPos;
+        extra.GetComponent<Renderer>().material.color = color;
         applyForceToExtra(extra.AddComponent<Rigidbody>(), spawnExcessSize, spawnExcessPos, delta);
         Destroy(extra, 5f);
     }

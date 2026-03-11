@@ -133,7 +133,7 @@ public class MasterScript : MonoBehaviour
     {
         var nextObject = Instantiate(prefab, transform);
         var currentObject = nextObject.GetComponent<CubeScript>();
-        giveColor(currentObject);
+        currentObject.color = new Color(UnityEngine.Random.Range(0F, 1F), UnityEngine.Random.Range(0, 1F), UnityEngine.Random.Range(0, 1F));
         currentObject.transform.localScale = scale;
         currentObject.markers = markers;
         currentObject.speed = .8f + (perfectCounter * .05f);
@@ -156,12 +156,6 @@ public class MasterScript : MonoBehaviour
     {
         perfectCounter = 0;
     }
-
-    public void giveColor(CubeScript obj)
-    {
-        obj.GetComponent<Renderer>().material.color = new Color(UnityEngine.Random.Range(0F, 1F), UnityEngine.Random.Range(0, 1F), UnityEngine.Random.Range(0, 1F));
-    }
-
 }
 
 
