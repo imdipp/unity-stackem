@@ -66,7 +66,6 @@ public class CubeScript : MonoBehaviour
     }
     private void placeAction(InputAction.CallbackContext obj)
     {
-        Debug.Log(isClickingUI());
         if (!isClickingUI())
         {
             checkPlacement();
@@ -170,12 +169,12 @@ public class CubeScript : MonoBehaviour
             particleSystem.startSize = particleSystem.startSize + (transform.localScale.x * .5f);
             particleSystem.Play();
         }
-        SoundMaster.instance.playOnPerfectAudio(perfectFx, transform, 1f, masterScript.perfectCounter);
+        SoundMaster.instance.playOnPerfectAudio(perfectFx, transform, masterScript.perfectCounter);
         transform.position = new Vector3(lastPos.x, transform.position.y, lastPos.z);
         masterScript.perfectCounter += 1;
         if (masterScript.perfectCounter > MAX_TO_GROW)
         {
-            SoundMaster.instance.playAudio(growFx, transform, 1f);
+            SoundMaster.instance.playAudio(growFx, transform);
             var targetScale = onX ? transform.localScale + new Vector3(GROWTH_VALUE, 0, GROWTH_VALUE) : transform.localScale + new Vector3(GROWTH_VALUE, 0, GROWTH_VALUE);
             //Vector3 targetPos = transform.position - (onX ? new Vector3(GROWTH_VALUE / 2f, 0, 0) : new Vector3(0, 0, GROWTH_VALUE / 2f));
             StartCoroutine(GrowCubeRoutine(targetScale, DURATION_OF_GROW));
@@ -220,7 +219,7 @@ public class CubeScript : MonoBehaviour
     void onCut(float delta)
     {
         masterScript.perfectCounter = 0;
-        SoundMaster.instance.playAudio(placementFx, transform, 1f);
+        SoundMaster.instance.playAudio(placementFx, transform);
         calculateNewSize(delta);
         alignPos(delta);
         spawnExtra(delta);
@@ -238,7 +237,9 @@ public class CubeScript : MonoBehaviour
         var extra = GameObject.CreatePrimitive(PrimitiveType.Cube);
         extra.transform.localScale = spawnExcessSize;
         extra.transform.localPosition = spawnExcessPos;
-        extra.GetComponent<Renderer>().material.color = color;
+        Material mat = new Material(GetComponent<Renderer>().material);
+        mat.color = color;
+        extra.GetComponent<Renderer>().material = mat;
         applyForceToExtra(extra.AddComponent<Rigidbody>(), spawnExcessSize, spawnExcessPos, delta);
         Destroy(extra, 5f);
     }

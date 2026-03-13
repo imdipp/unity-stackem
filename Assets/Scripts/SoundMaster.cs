@@ -7,6 +7,7 @@ public class SoundMaster : MonoBehaviour
     public static SoundMaster instance;
 
     [SerializeField] private AudioSource audioSourcePrefab;
+    public bool muted = false;
 
     void Awake()
     {
@@ -20,16 +21,15 @@ public class SoundMaster : MonoBehaviour
     {
         AudioSource audioSource = Instantiate(audioSourcePrefab, t);
 
+        audioSource.volume = !muted ? 1 : 0;
         audioSource.clip = audio;
 
         return audioSource;
     }
 
-    public void playAudio(AudioClip audio, Transform t, float volume)
+    public void playAudio(AudioClip audio, Transform t)
     {
         var audioSource = setupAudio(audio, t);
-
-        audioSource.volume = volume;
 
         audioSource.pitch = UnityEngine.Random.Range(.2f, .9f);
 
@@ -47,11 +47,9 @@ public class SoundMaster : MonoBehaviour
         Destroy(audioSource, audioSource.clip.length);
     }
 
-    public void playOnPerfectAudio(AudioClip audio, Transform t, float volume, int score)
+    public void playOnPerfectAudio(AudioClip audio, Transform t, int score)
     {
         var audioSource = setupAudio(audio, t);
-
-        audioSource.volume = volume;
 
         audioSource.pitch = .7f + (score * 0.10f);
 

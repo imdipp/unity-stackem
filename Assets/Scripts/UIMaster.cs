@@ -17,7 +17,7 @@ public class UIMaster : MonoBehaviour
     [SerializeField] private float fadeInDuration = 1;
     [SerializeField] private float scoreGoingUpDuration = 1.5f;
 
-    [SerializeField] private AudioListener cameraAudioListener;
+    //[SerializeField] private AudioListener cameraAudioListener;
 
     [SerializeField] private bool muted = false;
     [SerializeField] private Button muteButton;
@@ -102,13 +102,15 @@ public class UIMaster : MonoBehaviour
         muted = !muted;
         if (muted)
         {
+            SoundMaster.instance.muted = muted;
             muteButton.image.sprite = onMuted;
         }
         else
         {
+            SoundMaster.instance.muted = muted;
             muteButton.image.sprite = notMuted;
         }
-        cameraAudioListener.enabled = !muted;
+        //cameraAudioListener.enabled = !muted;
     }
 
 }
