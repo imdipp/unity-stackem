@@ -23,7 +23,7 @@ public class CubeScript : MonoBehaviour
     private bool goingToEnd = true;
     float growSpeed = 1f;
     const float GROWTH_VALUE = .35f;
-    const int MAX_TO_GROW = 5;
+    const int MAX_TO_GROW = 1;
     const float DURATION_OF_GROW = .65f;
     public bool moving = true;
     public bool onX;
@@ -110,16 +110,18 @@ public class CubeScript : MonoBehaviour
         place.action.started += placeAction;
     }
 
-    IEnumerator GrowCubeRoutine(Vector3 targetScale, float duration)
+    IEnumerator GrowCubeRoutine(Vector3 targetScale, Vector3 targetPos, float duration)
     {
         yield return new WaitForEndOfFrame();
 
         Vector3 startScale = transform.localScale;
+        Vector3 startPos = transform.position;
         float time = 0f;
         while (time < duration)
         {
             float t = time / duration * growSpeed;
             transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            transform.position = Vector3.Lerp(startPos, targetPos, t);
             time += Time.deltaTime;
             yield return null;
         }
@@ -164,8 +166,16 @@ public class CubeScript : MonoBehaviour
         {
             SoundMaster.instance.playAudio(growFx, transform);
             var targetScale = onX ? transform.localScale + new Vector3(GROWTH_VALUE, 0, GROWTH_VALUE) : transform.localScale + new Vector3(GROWTH_VALUE, 0, GROWTH_VALUE);
-            StartCoroutine(GrowCubeRoutine(targetScale, DURATION_OF_GROW));
-            transform.localScale = targetScale;
+            Vector3 growth = targetScale - transform.localScale;
+            float offsetX = growth.x * 0.5f;
+            float offsetZ = growth.z * 0.5f;
+            var targetPos = new Vector3(transform.localPosition.x + offsetX, transform.position.y, transform.localPosition.z + offsetZ);
+            StartCoroutine(GrowCubeRoutine(targetScale, targetPos, DURATION_OF_GROW));
+            masterScript.next(targetScale, targetPos, true, isSpecial);
+        }
+        else
+        {
+            masterScript.next(transform.localScale, transform.position, true, isSpecial);
         }
     }
 
