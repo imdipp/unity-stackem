@@ -115,22 +115,11 @@ public class CubeScript : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         Vector3 startScale = transform.localScale;
-        Vector3 startPos = transform.position;
         float time = 0f;
         while (time < duration)
         {
             float t = time / duration * growSpeed;
             transform.localScale = Vector3.Lerp(startScale, targetScale, t);
-            if (onX)
-            {
-                float offsetX = (transform.localScale.x - startScale.x) / 2f;
-                transform.position = startPos - new Vector3(offsetX, 0f, 0f);
-            }
-            else
-            {
-                float offsetZ = (transform.localScale.z - startScale.z) / 2f;
-                transform.position = startPos - new Vector3(0f, 0f, offsetZ);
-            }
             time += Time.deltaTime;
             yield return null;
         }
@@ -148,7 +137,6 @@ public class CubeScript : MonoBehaviour
         if (Mathf.Abs(delta) < MARGIN)
         {
             onPerfect();
-            masterScript.next(transform.localScale, transform.position, true, isSpecial);
         }
         else
         {
@@ -176,7 +164,6 @@ public class CubeScript : MonoBehaviour
         {
             SoundMaster.instance.playAudio(growFx, transform);
             var targetScale = onX ? transform.localScale + new Vector3(GROWTH_VALUE, 0, GROWTH_VALUE) : transform.localScale + new Vector3(GROWTH_VALUE, 0, GROWTH_VALUE);
-            //Vector3 targetPos = transform.position - (onX ? new Vector3(GROWTH_VALUE / 2f, 0, 0) : new Vector3(0, 0, GROWTH_VALUE / 2f));
             StartCoroutine(GrowCubeRoutine(targetScale, DURATION_OF_GROW));
             transform.localScale = targetScale;
         }
@@ -228,11 +215,11 @@ public class CubeScript : MonoBehaviour
     void spawnExtra(float delta)
     {
         Vector3 spawnExcessSize = onX ?
-        new Vector3(Mathf.Abs(delta), transform.localScale.y, transform.localScale.z)
+            new Vector3(Mathf.Abs(delta), transform.localScale.y, transform.localScale.z)
             : new Vector3(transform.localScale.x, transform.localScale.y, Mathf.Abs(delta));
         Vector3 spawnExcessPos = onX ?
             new Vector3(transform.position.x + (transform.localScale.x / 2 + Math.Abs(delta) / 2) * Math.Sign(delta), transform.position.y, transform.position.z)
-        :
+            :
             new Vector3(transform.position.x, transform.position.y, transform.position.z + (transform.localScale.z / 2 + Math.Abs(delta) / 2) * Math.Sign(delta));
         var extra = GameObject.CreatePrimitive(PrimitiveType.Cube);
         extra.transform.localScale = spawnExcessSize;
@@ -244,7 +231,7 @@ public class CubeScript : MonoBehaviour
         Destroy(extra, 5f);
     }
 
-    //simulate cut effect using physics
+
     public void applyForceToExtra(Rigidbody extra, Vector3 size, Vector3 pos, float delta)
     {
         const float AMOUNT_OF_FORCE = 1f;

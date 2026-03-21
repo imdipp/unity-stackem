@@ -76,10 +76,11 @@ public class UIMaster : MonoBehaviour
         Text ui = scoreUI.GetComponent<Text>();
         float time = 0.0f;
         float duration = 1f;
+        int startScore = int.Parse(ui.text);
         while (time < duration)
         {
             time += Time.deltaTime;
-            ui.text = Mathf.RoundToInt(Mathf.Lerp(System.Convert.ToInt32(ui.text), finalScore, time / duration)).ToString();
+            ui.text = Mathf.RoundToInt(Mathf.Lerp(startScore, finalScore, time / duration)).ToString();
             yield return null;
         }
         ui.text = finalScore.ToString();

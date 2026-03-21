@@ -138,6 +138,7 @@ MonoBehaviour:
   speed: 0
   moving: 1
   onX: 0
+  color: {r: 1, g: 1, b: 1, a: 0}
   isSpecial: 0
   place: {fileID: -6872371238602360576, guid: 458f475ad3eed4f398a3ff78dfbf5880, type: 3}
 --- !u!1 &2103256253088514793
